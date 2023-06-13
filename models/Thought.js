@@ -44,11 +44,19 @@ const thoughtSchema = new Schema(
     },
     {
         toJSON: {
+            virtuals: true,
             getters: true,
         },
         id: false,
     }
 );
 
-// thoughtSchema is exported and used in other areas of the application
-module.exports = thoughtSchema;
+// virtual property that retrieves the length of the thought's reactions array field
+thoughtSchema.virtual('reactionCount').get(function () {
+        return this.reactions.length;
+    });
+
+// thoughtSchema is defiend and exported
+const Thought = model('Thought', thoughtSchema);
+
+module.exports = Thought;
