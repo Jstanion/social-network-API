@@ -19,10 +19,31 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
+        reactions: [
+            {
+                reactionId: {
+                    type: Schema.Types.ObjectId,
+                    default: () => new Types.ObjectId(),
+                },
+                reactionBody: {
+                    type: String,
+                    required: true,
+                    max_length: 280,
+                },
+                username: {
+                    type: String,
+                    required: true,
+                },
+                createdAt: {
+                    type: Date,
+                    default: Date.now,
+                    get: (timestamp) => dateFormat(timestamp),
+                },
+            },
+        ],
     },
     {
         toJSON: {
-            virtuals: true,
             getters: true,
         },
         id: false,
