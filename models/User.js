@@ -1,8 +1,6 @@
 // import Schema and model objects from the mongoose library
 const { Schema, model } = require('mongoose');
 
-
-
 // Schema to create a User model defining the fields and properties for a user document in MongoDB
 const userSchema = new Schema(
     {
@@ -11,12 +9,11 @@ const userSchema = new Schema(
             unique: true,
             required: true,
             trim: true,
-            max_length: 30,
         },
         email: {
             type: String,
-            unique: true,
             required: true,
+            unique: true,
             trim: true,
 
             // regex pattern to validate the correct format for an email address, or returns a message if invalid
@@ -25,7 +22,7 @@ const userSchema = new Schema(
         thoughts: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Thoughts', 
+                ref: 'Thought', 
             },
         ],
         friends: [
