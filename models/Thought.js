@@ -1,28 +1,28 @@
 // import Schema and Types objects from the mongoose library
-const { Schema, Types } = require('mongoose');
+const { Schema, Model, Types } = require('mongoose');
 
-// Creates a Schema for Thoughts defining the fields and properties for a thoughts document in the MongoDB collection
+// Creates a thought Schema defining the fields and properties for a thoughts document in the MongoDB collection
 const thoughtSchema = new Schema(
     {
-        // represents the unique identifier for each thought
-        thoughtId: {
-            type: Schema.Types.ObjectId,
-            default: () => new Types.ObjectId(),
-        },
         thoughtText: {
             type: String,
             required: true,
-            trim: true,
             min_length: 1,
-            max_length: 150,
+            max_length: 280,
         },
         createdAt: {
             type: Date,
             default: Date.now,
+            get: (timestamp) => dateFormat(timestamp),
+        },
+        username: {
+            type: String,
+            required: true,
         },
     },
     {
         toJSON: {
+            virtuals: true,
             getters: true,
         },
         id: false,
