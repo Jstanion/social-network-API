@@ -53,7 +53,7 @@ module.exports = {
                 { runValidators: true, new: true }
             );
 
-            if (!user) {
+            if (!updateUser) {
                 return res.status(404).json({ message: "User not found!" });
             }
 
@@ -62,5 +62,5 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    
+
 };
