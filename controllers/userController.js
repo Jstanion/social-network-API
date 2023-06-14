@@ -32,7 +32,7 @@ module.exports = {
     },
     async createUser(req, res) {
         try {
-            const userData = await User.create(req.body);
+            const newUser = await User.create(req.body);
             
             // example data
             // {
@@ -40,9 +40,27 @@ module.exports = {
             //   "email": "yourEmail@gmail.com"
             // }
 
-            res.json(userData);
+            res.json(newUser);
         } catch {
             res.status(500).json(err);
         }
     },
+    async updateUser(req, res) {
+        try {
+            const updateUser = await User.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $set: req.body },
+                { runValidators: true, new: true }
+            );
+
+            if (!user) {
+                return res.status(404).json({ message: "User not found!" });
+            }
+
+            res.json(updateUser)
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+    
 };
