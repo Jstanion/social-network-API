@@ -1,4 +1,4 @@
-const { ObjectId } = require('mongoose').Types;
+const User = require('../models/User');
 
 // import User model
 const { User } = require('../models')
