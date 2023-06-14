@@ -7,6 +7,6 @@ const apiRoutes = require('./api');
 router.use('./api', apiRoutes);
 
 // any routes that do not match the specified routes in apiRoutes module will return the provided response
-router.use((req,res) => res.send('Incoreect Route!'));
+router.use((req,res) => res.send('Incorrect Route!'));
 
 module.exports = router;
