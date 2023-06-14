@@ -30,5 +30,19 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    async 
-}
+    async createUser(req, res) {
+        try {
+            const userData = await User.create(req.body);
+            
+            // example data
+            // {
+            //   "username": "yourName",
+            //   "email": "yourEmail@gmail.com"
+            // }
+
+            res.json(userData);
+        } catch {
+            res.status(500).json(err);
+        }
+    },
+};
