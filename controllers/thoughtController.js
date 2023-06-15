@@ -97,22 +97,37 @@ module.exports = {
     // add reaction to a thought
     async createReaction(req, res) {
         try {
-            const { reactionBody, username } = req.body;
-
-            const updatedThought = await Thought.findOneAndUpdate(
+            const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: { reactions: req.body } },
                 { new: true }
             );
 
-            if (!updatedThought) {
+            if (!addReaction) {
                 return res.status(404).json({ message: "Item not found!" });
             }
 
-            res.json(updatedThought);
+            res.json(addReaction);
         } catch (err) {
             res.status(500).json(err);
         }
     },
-    // 
-}
+    // remove a reaction from a thought
+    async removeReaction(req, res) {
+        try {
+            const removeReaction = await Thought.findOneAndUpdate(
+                { _id: req.params.userId },
+                { $pull: { reactions: req.body } },
+                { new: true }
+            ):
+
+            if (!removeReaction) {
+                return res.status(404).json({ message: "Item not found!" });
+            }
+
+            res.json(removeReaction);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+};
