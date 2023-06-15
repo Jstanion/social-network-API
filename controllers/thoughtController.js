@@ -1,4 +1,4 @@
-const Thought = require('../models/Thought');
+const { Thought, User } = require('../models/Thought');
 
 module.exports = {
     // retrieve all thoughts
@@ -16,11 +16,27 @@ module.exports = {
             const singleThought = await Thought.findOne({ _id: req.params.thoughtId })
 
             if (!singleThought) {
-                return res.status(404).json({ message: 'User not found!' });
+                return res.status(404).json({ message: 'Item not found!' });
             }
             
             res.json(singleThought);
         } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+    async createThought(req, res) {
+        try {
+            const newThought = await Thought.create(req.body);
+            
+            // example data
+            // {
+            // "thoughtText": "Here's a cool thought...",
+            // "username": "yourName",
+            // "userId": "5edff358a0fcb779aa7b118b"
+            // }
+
+            res.json(newUser);
+        } catch {
             res.status(500).json(err);
         }
     },
