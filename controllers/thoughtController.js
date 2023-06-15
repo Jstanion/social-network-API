@@ -4,7 +4,8 @@ module.exports = {
     // retrieve all thoughts
     async getAllThoughts(reg, res) {
         try {
-            const thoughts = await Thought.find();
+            // the sort method will take retrieved data and place it in descending order
+            const thoughts = await Thought.find().sort({ createdAt: -1 });
             res.json(thoughts);
         } catch (err) {
             res.status(500).json(err);
