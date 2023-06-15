@@ -82,10 +82,17 @@ module.exports = {
                 return res.status(404).json({ message: "Item not found!" });
             }
 
+            // remove the thought _id from associated user's thought array field
+            await User.findOneAndUpdate(
+                deletedThought.userId, 
+                { $pull: { thoughts: req.params.thoughtId } }, 
+                { new: true }
+            ); 
+
             res.json({ message: "Thought successfully deleted" });
         } catch (err) {
             res.status(500).json(err)
         };
     },
-    
+
 }
