@@ -94,5 +94,25 @@ module.exports = {
             res.status(500).json(err)
         };
     },
+    // add reaction to a thought
+    async createReaction(req, res) {
+        try {
+            const { reactionBody, username } = req.body;
 
+            const updatedThought = await Thought.findOneAndUpdate(
+                { _id: req.params.thoughtId },
+                { $addToSet: { reactions: req.body } },
+                { new: true }
+            );
+
+            if (!updatedThought) {
+                return res.status(404).json({ message: "Item not found!" });
+            }
+
+            res.json(updatedThought);
+        } catch (err) {
+            res.status(500).json(err);
+        }
+    },
+    // 
 }
