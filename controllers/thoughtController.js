@@ -68,9 +68,24 @@ module.exports = {
                 return res.status(404).json({ message: "Item not found!" });
             }
 
-            res.send(updatedThought);
+            res.json(updatedThought);
         } catch (err) {
             res.status(500).json(err);
         }
-    }
+    },
+    // delete a thought
+    async deleteThought(req, res) {
+        try {
+            const deletedThought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
+
+            if (!deletedThought) {
+                return res.status(404).json({ message: "Item not found!" });
+            }
+
+            res.json({ message: "Thought successfully deleted" });
+        } catch (err) {
+            res.status(500).json(err)
+        };
+    },
+    
 }
