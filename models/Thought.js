@@ -1,5 +1,5 @@
 // import Schema and Types objects from the mongoose library
-const { Schema, Model, Types } = require('mongoose');
+const { Schema, model, Types } = require('mongoose');
 
 // Creates a thought Schema defining the fields and properties for a thoughts document in the MongoDB collection
 const thoughtSchema = new Schema(
