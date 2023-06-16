@@ -95,7 +95,7 @@ module.exports = {
         };
     },
     // add reaction to a thought
-    async createReaction(req, res) {
+    async addReaction(req, res) {
         try {
             const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
@@ -119,7 +119,7 @@ module.exports = {
                 { _id: req.params.userId },
                 { $pull: { reactions: req.body } },
                 { new: true }
-            ):
+            );
 
             if (!removeReaction) {
                 return res.status(404).json({ message: "Item not found!" });
