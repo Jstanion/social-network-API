@@ -4,7 +4,7 @@ const router = require('express').Router();
 const apiRoutes = require('./api');
 
 // specifying how the api routes should be handled using the apiRoutes module
-router.use('./api', apiRoutes);
+router.use('/api', apiRoutes);
 
 // any routes that do not match the specified routes in apiRoutes module will return the provided response
 router.use((req,res) => res.send('Incorrect Route!'));
