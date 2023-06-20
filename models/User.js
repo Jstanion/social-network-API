@@ -1,5 +1,5 @@
 // import Schema and model objects from the mongoose library
-const { Schema, model, Types } = require('mongoose');
+const { Schema, model } = require('mongoose');
 
 // Schema to create a User model defining the fields and properties for a user document in MongoDB
 const userSchema = new Schema(

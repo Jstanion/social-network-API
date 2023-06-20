@@ -1,5 +1,6 @@
 // import Schema and Types objects from the mongoose library
-const { Schema, model, Types } = require('mongoose');
+const { Schema, model } = require('mongoose');
+const reactions = require('./Reaction');
 
 // Creates a thought Schema defining the fields and properties for a thoughts document in the MongoDB collection
 const thoughtSchema = new Schema(
@@ -18,27 +19,7 @@ const thoughtSchema = new Schema(
             type: String,
             required: true,
         },
-        reactions: [
-            {
-                reactionId: {
-                    type: Schema.Types.ObjectId,
-                    default: () => new Types.ObjectId(),
-                },
-                reactionBody: {
-                    type: String,
-                    required: true,
-                    max_length: 280,
-                },
-                username: {
-                    type: String,
-                    required: true,
-                },
-                createdAt: {
-                    type: Date,
-                    default: Date.now,
-                },
-            },
-        ],
+        reactions: [reactions],
     },
     {
         toJSON: {
@@ -54,7 +35,7 @@ thoughtSchema.virtual('reactionCount').get(function () {
         return this.reactions.length;
     });
 
-// thoughtSchema is defiend and exported
+// thoughtSchema is defiend as a model and exported
 const Thought = model('Thought', thoughtSchema);
 
 module.exports = Thought;
