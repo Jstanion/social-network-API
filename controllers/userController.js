@@ -6,9 +6,10 @@ module.exports = {
     async getAllUsers(req, res) {
         try {
             const users = await User.find()
-            .select('-__v')
-            .populate('thoughts')
-            .populate('friends');
+            // .populate('thoughts')
+            // .populate('friends')
+            // .select('-__v')
+
             res.json(users);
         } catch (err) {
             res.status(500).json(err);
@@ -17,9 +18,9 @@ module.exports = {
     async getUserById(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId })
-            .select('-__v')
-            .populate('thoughts')
-            .populate('friends');
+            // .populate('thoughts')
+            // .populate('friends')
+            // .select('-__v')
             
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });
@@ -79,7 +80,7 @@ module.exports = {
     // add a friend
     async addFriend(req, res) {
         try {
-            const friendId = req.params.friendId
+            const friendId = req.params.friendId;
             const addFriend = await User.findOneAndUpdate(
                 { _id: req.params.userId },
                 { $addToSet: { friends: friendId } },
