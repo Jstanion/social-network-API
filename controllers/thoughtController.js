@@ -3,19 +3,23 @@ const User = require('../models/User.js')
 
 module.exports = {
     // retrieve all thoughts
-    async getAllThoughts(reg, res) {
+    async getAllThoughts(req, res) {
         try {
             // the sort method will take retrieved data and place it in descending order
             const thoughts = await Thought.find().sort({ createdAt: -1 });
+            console.log(thoughts)
+
             res.json(thoughts);
         } catch (err) {
             res.status(500).json(err);
+            console.log(err)
         }
     },
     // retrieve a single thought by it's ID
     async getThoughtById(req, res) {
         try {
             const singleThought = await Thought.findOne({ _id: req.params.thoughtId })
+            console.log(singleThought)
 
             if (!singleThought) {
                 return res.status(404).json({ message: 'Item not found!' });
@@ -64,6 +68,7 @@ module.exports = {
                 { $set: req.body },
                 { new: true }
             );
+            
 
             if (!updatedThought) {
                 return res.status(404).json({ message: "Item not found!" });
@@ -98,9 +103,10 @@ module.exports = {
     // add reaction to a thought
     async addReaction(req, res) {
         try {
+            const reactionId = req.params.reactionId
             const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $addToSet: { reactions: req.body } },
+                { $addToSet: { reactions: reactionId } },
                 { new: true }
             );
 
@@ -117,7 +123,7 @@ module.exports = {
     async removeReaction(req, res) {
         try {
             const removeReaction = await Thought.findOneAndUpdate(
-                { _id: req.params.userId },
+                { _id: req.params.thoughtId },
                 { $pull: { reactions: req.body } },
                 { new: true }
             );
