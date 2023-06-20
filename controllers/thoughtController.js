@@ -1,5 +1,6 @@
+const { add } = require('../models/Reaction.js');
 const Thought = require('../models/Thought.js');
-const User = require('../models/User.js')
+const User = require('../models/User.js');
 
 module.exports = {
     // retrieve all thoughts
@@ -110,6 +111,7 @@ module.exports = {
                 { $addToSet: { reactions: req.body } },
                 { new: true }
             );
+            console.log(addReaction)
 
             if (!addReaction) {
                 return res.status(404).json({ message: "Item not found!" });
