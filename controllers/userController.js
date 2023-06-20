@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/User.js');
 
 module.exports = {
 
@@ -6,9 +6,9 @@ module.exports = {
     async getAllUsers(req, res) {
         try {
             const users = await User.find()
-            // .populate('thoughts')
-            // .populate('friends')
-            // .select('-__v')
+            .populate('thoughts')
+            .populate('friends')
+            .select('-__v')
 
             res.json(users);
         } catch (err) {
@@ -18,9 +18,9 @@ module.exports = {
     async getUserById(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId })
-            // .populate('thoughts')
-            // .populate('friends')
-            // .select('-__v')
+            .populate('thoughts')
+            .populate('friends')
+            .select('-__v')
             
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });

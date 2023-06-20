@@ -7,19 +7,16 @@ module.exports = {
         try {
             // the sort method will take retrieved data and place it in descending order
             const thoughts = await Thought.find().sort({ createdAt: -1 });
-            console.log(thoughts)
 
             res.json(thoughts);
         } catch (err) {
             res.status(500).json(err);
-            console.log(err)
         }
     },
     // retrieve a single thought by it's ID
     async getThoughtById(req, res) {
         try {
             const singleThought = await Thought.findOne({ _id: req.params.thoughtId })
-            console.log(singleThought)
 
             if (!singleThought) {
                 return res.status(404).json({ message: 'Item not found!' });
@@ -37,14 +34,12 @@ module.exports = {
 
             // example data
             // {
-                // "thoughtText": "Here's a cool thought...",
-                // "username": "yourName",
-                // "userId": "5edff358a0fcb779aa7b118b"
-                // }
+            // "thoughtText": "Here's a cool thought...",
+            // "username": "yourName",
+            // "userId": "5edff358a0fcb779aa7b118b"
+            // }
                 
-                
-                // add thought _id to the associated user's thought array field
-                // const { thoughtText, username, userId } = req.body;
+            // add thought _id to the associated user's thought array field
             const user = await User.findOneAndUpdate(
                 { _id: req.body.userId }, 
                 { $addToSet: { thoughts: newThought._id } }, 
@@ -103,10 +98,16 @@ module.exports = {
     // add reaction to a thought
     async addReaction(req, res) {
         try {
-            const reactionId = req.params.reactionId
+
+            // Example data
+            //{
+            //  "reactionBody": "👍"
+            //  "username": "yourUsername"
+            //}
+
             const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
-                { $addToSet: { reactions: reactionId } },
+                { $addToSet: { reactions: req.body } },
                 { new: true }
             );
 
