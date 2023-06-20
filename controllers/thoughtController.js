@@ -51,7 +51,7 @@ module.exports = {
             }
 
             res.json(newThought);
-        } catch {
+        } catch (err) {
             res.status(500).json(err);
         }
     },
