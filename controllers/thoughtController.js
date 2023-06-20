@@ -1,4 +1,5 @@
-const { Thought, User } = require('../models/Thought');
+const Thought = require('../models/Thought.js');
+const User = require('../models/User.js')
 
 module.exports = {
     // retrieve all thoughts
@@ -28,29 +29,29 @@ module.exports = {
     // create a new thought
     async createThought(req, res) {
         try {
+            const newThought = await Thought.create(req.body);
 
             // example data
             // {
-            // "thoughtText": "Here's a cool thought...",
-            // "username": "yourName",
-            // "userId": "5edff358a0fcb779aa7b118b"
-            // }
-
-            const { thoughtText, username, userId } = req.body;
-            const newThought = await Thought.create({ thoughtText, username });
-
-            // add thought _id to the associated user's thought array field
+                // "thoughtText": "Here's a cool thought...",
+                // "username": "yourName",
+                // "userId": "5edff358a0fcb779aa7b118b"
+                // }
+                
+                
+                // add thought _id to the associated user's thought array field
+                // const { thoughtText, username, userId } = req.body;
             const user = await User.findOneAndUpdate(
-                userId, 
-                { $push: { thoughts: newThought._id } }, 
+                { _id: req.body.userId }, 
+                { $addToSet: { thoughts: newThought._id } }, 
                 { new: true }
             );
 
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ message: 'Thought created, but no user was found' });
             }
 
-            res.json(newThought);
+            res.json("Thought succesfully created!");
         } catch (err) {
             res.status(500).json(err);
         }
