@@ -1,11 +1,13 @@
-const { Thought, User } = require('../models/Thought');
+const Thought = require('../models/Thought.js');
+const User = require('../models/User.js')
 
 module.exports = {
     // retrieve all thoughts
-    async getAllThoughts(reg, res) {
+    async getAllThoughts(req, res) {
         try {
             // the sort method will take retrieved data and place it in descending order
             const thoughts = await Thought.find().sort({ createdAt: -1 });
+
             res.json(thoughts);
         } catch (err) {
             res.status(500).json(err);
@@ -28,6 +30,7 @@ module.exports = {
     // create a new thought
     async createThought(req, res) {
         try {
+            const newThought = await Thought.create(req.body);
 
             // example data
             // {
@@ -35,23 +38,20 @@ module.exports = {
             // "username": "yourName",
             // "userId": "5edff358a0fcb779aa7b118b"
             // }
-
-            const { thoughtText, username, userId } = req.body;
-            const newThought = await Thought.create({ thoughtText, username });
-
+                
             // add thought _id to the associated user's thought array field
             const user = await User.findOneAndUpdate(
-                userId, 
-                { $push: { thoughts: newThought._id } }, 
+                { _id: req.body.userId }, 
+                { $addToSet: { thoughts: newThought._id } }, 
                 { new: true }
             );
 
             if (!user) {
-                return res.status(404).json({ message: 'User not found' });
+                return res.status(404).json({ message: 'Thought created, but no user was found' });
             }
 
-            res.json(newThought);
-        } catch {
+            res.json("Thought succesfully created!");
+        } catch (err) {
             res.status(500).json(err);
         }
     },
@@ -63,6 +63,7 @@ module.exports = {
                 { $set: req.body },
                 { new: true }
             );
+            
 
             if (!updatedThought) {
                 return res.status(404).json({ message: "Item not found!" });
@@ -97,6 +98,13 @@ module.exports = {
     // add reaction to a thought
     async addReaction(req, res) {
         try {
+
+            // Example data
+            //{
+            //  "reactionBody": "👍"
+            //  "username": "yourUsername"
+            //}
+
             const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: { reactions: req.body } },
@@ -116,7 +124,7 @@ module.exports = {
     async removeReaction(req, res) {
         try {
             const removeReaction = await Thought.findOneAndUpdate(
-                { _id: req.params.userId },
+                { _id: req.params.thoughtId },
                 { $pull: { reactions: req.body } },
                 { new: true }
             );

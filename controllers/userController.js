@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/User.js');
 
 module.exports = {
 
@@ -6,9 +6,10 @@ module.exports = {
     async getAllUsers(req, res) {
         try {
             const users = await User.find()
-            .select('-__v')
             .populate('thoughts')
-            .populate('friends');
+            .populate('friends')
+            .select('-__v')
+
             res.json(users);
         } catch (err) {
             res.status(500).json(err);
@@ -17,9 +18,9 @@ module.exports = {
     async getUserById(req, res) {
         try {
             const user = await User.findOne({ _id: req.params.userId })
-            .select('-__v')
             .populate('thoughts')
-            .populate('friends');
+            .populate('friends')
+            .select('-__v')
             
             if (!user) {
                 return res.status(404).json({ message: 'User not found!' });
@@ -41,7 +42,7 @@ module.exports = {
             // }
 
             res.json(newUser);
-        } catch {
+        } catch (err) {
             res.status(500).json(err);
         }
     },
@@ -79,9 +80,10 @@ module.exports = {
     // add a friend
     async addFriend(req, res) {
         try {
+            const friendId = req.params.friendId;
             const addFriend = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $addToSet: { friends: req.body } },
+                { $addToSet: { friends: friendId } },
                 { runValidators: true, new: true }
             );
 
@@ -98,14 +100,15 @@ module.exports = {
     // remove a friend
     async removeFriend(req, res) {
         try {
+            const friendId = req.params.friendId
             const removeFriend = await User.findOneAndUpdate(
                 { _id: req.params.userId },
-                { $pull: { friends: req.body } },
+                { $pull: { friends: friendId } },
                 { runValidators: true, new: true}
             )
 
             if (!removeFriend) {
-                res.status(404).json({ message: "User not found!" });
+                return res.status(404).json({ message: "User not found!" });
             }
 
             res.json(removeFriend);
