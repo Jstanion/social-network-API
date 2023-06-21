@@ -1,12 +1,15 @@
+// Import the 'add' function from the ../models/Reaction.js file
 const { add } = require('../models/Reaction.js');
+// Import the Thought model from the ../models/Thought.js file
 const Thought = require('../models/Thought.js');
+// Import the User model from the ../models/User.js file
 const User = require('../models/User.js');
 
 module.exports = {
-    // retrieve all thoughts
+    // Retrieve all thoughts
     async getAllThoughts(req, res) {
         try {
-            // the sort method will take retrieved data and place it in descending order
+            // Find all thoughts and sort them in descending order based on 'createdAt' field
             const thoughts = await Thought.find().sort({ createdAt: -1 });
 
             res.json(thoughts);
@@ -14,7 +17,7 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // retrieve a single thought by it's ID
+    // Retrieve a single thought by its ID
     async getThoughtById(req, res) {
         try {
             const singleThought = await Thought.findOne({ _id: req.params.thoughtId })
@@ -28,19 +31,19 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // create a new thought
+    // Create a new thought
     async createThought(req, res) {
         try {
+            // Create a new thought using the data from the request body
             const newThought = await Thought.create(req.body);
-
-            // example data
-            // {
-            // "thoughtText": "Here's a cool thought...",
-            // "username": "yourName",
-            // "userId": "5edff358a0fcb779aa7b118b"
-            // }
+                // example data
+                // {
+                // "thoughtText": "Here's a cool thought...",
+                // "username": "yourName",
+                // "userId": "5edff358a0fcb779aa7b118b"
+                // }
                 
-            // add thought _id to the associated user's thought array field
+            // Add the thought's _id to the associated user's 'thoughts' array field
             const user = await User.findOneAndUpdate(
                 { _id: req.body.userId }, 
                 { $addToSet: { thoughts: newThought._id } }, 
@@ -56,9 +59,10 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // update a thought
+    // Update a thought
     async updateThought(req, res) {
         try {
+            // Find a thought by its ID and update its data with the content of the request body
             const updatedThought = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $set: req.body },
@@ -75,16 +79,17 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // delete a thought
+    // Delete a thought
     async deleteThought(req, res) {
         try {
+            // Find a thought by its ID and remove it
             const deletedThought = await Thought.findOneAndRemove({ _id: req.params.thoughtId });
 
             if (!deletedThought) {
                 return res.status(404).json({ message: "Item not found!" });
             }
 
-            // remove the thought _id from associated user's thought array field
+            // Remove the thought's _id from the associated user's 'thoughts' array field
             await User.findOneAndUpdate(
                 deletedThought.userId, 
                 { $pull: { thoughts: req.params.thoughtId } }, 
@@ -96,21 +101,21 @@ module.exports = {
             res.status(500).json(err)
         };
     },
-    // add reaction to a thought
+    // Add a reaction to a thought
     async addReaction(req, res) {
         try {
-
             // Example data
             //{
             //  "reactionBody": "👍"
             //  "username": "yourUsername"
             //}
 
+            // Find the thought by its ID and add the specified reaction to the reactions array
             const addReaction = await Thought.findOneAndUpdate(
                 { _id: req.params.thoughtId },
                 { $addToSet: { reactions: req.body } },
                 { new: true }
-            );
+                );
             console.log(addReaction)
 
             if (!addReaction) {
@@ -122,12 +127,14 @@ module.exports = {
             res.status(500).json(err);
         }
     },
-    // remove a reaction from a thought
+    // Remove a reaction from a thought
     async removeReaction(req, res) {
         try {
+            // Get the reactionId and thoughtId from the request parameters
             const { reactionId } = req.params;
             const { thoughtId } = req.params;
-
+            
+            // Find the thought by its ID and remove the specified reaction from the reactions array
             const removeReaction = await Thought.findOneAndUpdate(
                 { _id: thoughtId },
                 { $pull: { reactions: { _id: reactionId } } },
