@@ -1,12 +1,14 @@
+// Import the necessary module for creating a router
 const router = require('express').Router();
 
-// imports the api routes form the ./api directory
+// Import the API routes from the ./api directory
 const apiRoutes = require('./api');
 
-// specifying how the api routes should be handled using the apiRoutes module
+// Specify how the API routes should be handled using the apiRoutes module
 router.use('/api', apiRoutes);
 
-// any routes that do not match the specified routes in apiRoutes module will return the provided response
+// Define a route handler for any routes that are not specified in apiRoutes module
 router.use((req,res) => res.send('Incorrect Route!'));
 
+// Export the router for external use
 module.exports = router;
