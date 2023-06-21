@@ -125,9 +125,12 @@ module.exports = {
     // remove a reaction from a thought
     async removeReaction(req, res) {
         try {
+            const { reactionId } = req.params;
+            const { thoughtId } = req.params;
+
             const removeReaction = await Thought.findOneAndUpdate(
-                { _id: req.params.thoughtId },
-                { $pull: { reactions: req.body } },
+                { _id: thoughtId },
+                { $pull: { reactions: { _id: reactionId } } },
                 { new: true }
             );
 
