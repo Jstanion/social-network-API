@@ -26,7 +26,11 @@ The user just needs to run npm i to download the necessary denedencies. A simple
 
 ## Credits
 
-[Stack Overflow](https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax)
+- [MongoDB](https://www.tutorialspoint.com/mongodb/index.htm)
+- [Mongoose](https://www.npmjs.com/package/mongoose)
+- [Stack Overflow - Email Validation](https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax)
+- [Stack Overflow - $pull Method](https://stackoverflow.com/questions/48988019/mongoose-pull-objectid-from-array)
+- 
 
 ## License
 
